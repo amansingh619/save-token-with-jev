@@ -26,6 +26,7 @@ function numberAfter(args: string[], name: string, fallback: number): number {
   return Number.isFinite(value) ? value : fallback;
 }
 
+// Compacts the summary & directly calls the Jev API to call tools
 async function runCompact(args: string[]): Promise<void> {
   const inputPath = valueAfter(args, '--input');
   const outputPath = valueAfter(args, '--output');
@@ -57,15 +58,7 @@ Usage:
   save-token-jev compact [--input FILE] [--output FILE] [--format auto|generic|anthropic|openai-chat|openai-responses|opencode|codex-jsonl]
   save-token-jev dashboard [--port PORT] [--data-dir DIR]
   save-token-jev hook codex
-  save-token-jev doctor
-
-Environment:
-  TYPESAFE_API_KEY                       required for live compaction
-  JEV_MODEL, JEV_BASE_URL                optional Jev transport overrides
-  SAVE_TOKEN_JEV_KEEP_THRESHOLD          default 0.5
-  SAVE_TOKEN_JEV_PRESERVE_RECENT         default 6
-  SAVE_TOKEN_JEV_MIN_REDUCTION           integration fallback threshold, default 0.15
-`;
+  `;
 }
 
 async function main(): Promise<void> {
@@ -75,15 +68,6 @@ async function main(): Promise<void> {
   if (args[0] === 'hook' && args[1] === 'codex') {
     const input = JSON.parse(await stdin());
     process.stdout.write(`${JSON.stringify(await handleCodexHook(input))}\n`);
-    return;
-  }
-  if (args[0] === 'doctor') {
-    process.stdout.write(JSON.stringify({
-      node: process.version,
-      apiKey: resolveApiKey() ? 'configured' : 'missing',
-      model: process.env.JEV_MODEL || 'jev-latest',
-      baseUrl: process.env.JEV_BASE_URL || 'https://api.typesafe.ai/v1/systemone',
-    }, null, 2) + '\n');
     return;
   }
   process.stdout.write(usage());
