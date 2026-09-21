@@ -1,6 +1,4 @@
-# save-token-with-jev
-
-This repo helps your coding agent to reduce the unnecesary decision time which it takes in tool calling by simply integrating the JEV based clasifier models which alike other models doesn't go through the auto-regressive loop & instead shares the result which matters.
+This repo helps your coding agent to reduce the unnecessary decision time which it takes in tool calling by simply integrating the JEV based clasifier models which alike other models doesn't go through the auto-regressive loop & instead shares the result which matters.
 
 The `save-token-with-jev` is implemented behind a normalized transcript model and host adapters so the same compaction policy works across multiple coding-agent runtimes.
 
